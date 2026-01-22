@@ -1,0 +1,6 @@
+{
+    "data": "data/*.zip",
+    "database": "data/events.db",
+    "table": "events",
+    "users": []
+}
