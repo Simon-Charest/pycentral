@@ -3,13 +3,21 @@ SELECT t.[Date and Time]
     , t.[Description #1]
     , t.[Description #2]
     , t.[Card number]
-FROM token AS t
+    , u.[first_name]
+    , u.[last_name]
+FROM tokens AS t
+    LEFT JOIN users AS u ON u.token = t.[Description #2]
 WHERE 0 = 0
 
     -- Exclude administration
-    AND t.[Event message] != 'Server communication failed'
+    AND t.[Event message] NOT IN (
+        'Automatic report requested'
+        , 'Server communication failed'
+    )
     AND t.[Description #1] NOT IN (
-        'KT-400'
+        'Database closed'
+        , 'Database open'
+        , 'KT-400'
         , 'KT-400 Salle Serveurs'
         , 'Multi-Site Gateway'
         , 'SmartLink'

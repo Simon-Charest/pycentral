@@ -17,10 +17,31 @@ SELECT a.datetime
             )
         ELSE NULL
     END AS pr
-    , u.name
+    , u.first_name
+    , u.last_name
     , a.event
-FROM alarm AS a
+FROM alarms AS a
     LEFT JOIN users AS u ON u.id = pr
-WHERE DATE(a.datetime) BETWEEN '2026-01-23' AND '2026-01-25'
+WHERE 0 = 0
+    -- Exclude administration
+    AND a.event NOT LIKE '%SIGNAL TRAITER%'
+
+    -- Exclude closings
+    --AND a.event NOT LIKE 'FERMETURE%'
+    
+    -- Exclude maintenance
+    --AND pr NOT IN ('001', '015')
+
+    -- Exclude owners
+    --AND pr NOT IN ('000', '002')
+
+    -- Exclude vetted resources
+    --AND pr NOT IN ('016', '017')
+    
+    -- Exclude tests
+    AND a.event != 'TEST CODE GSM/IP'
+
+    AND DATE(a.datetime) >= '2026-01-23'
+    AND DATE(a.datetime) <= '2026-01-25'
 ORDER BY a.datetime ASC
 ;

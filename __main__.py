@@ -31,8 +31,7 @@ def main() -> None:
             path = configuration["alarm"]["data"]
         
         data = get_alarm_data(path, arguments.verbose)
-        write(data, connection, configuration["alarm"]["table"], "replace", False, arguments.verbose)
-        write(DataFrame(configuration["alarm"]["users"]), connection, "users", "replace", False, arguments.verbose)
+        write(data, connection, "alarms", "replace", False, arguments.verbose)
 
     if arguments.get_token_data is not None:
         if len(arguments.get_token_data):
@@ -42,8 +41,10 @@ def main() -> None:
             path = configuration["token"]["data"]
 
         data = get_token_data(path, arguments.verbose)
-        write(data, connection, configuration["token"]["table"], "replace", False, arguments.verbose)
+        write(data, connection, "tokens", "replace", False, arguments.verbose)
 
+    if arguments.get_user_data is not None:
+        write(DataFrame(configuration["user"]["data"]), connection, "users", "replace", False, arguments.verbose)
 
     if arguments.list:
         paths: list[str] = glob("sql/**/*.sql", recursive=True)
@@ -65,6 +66,7 @@ def parse_arguments() -> Namespace:
     argument_parser: ArgumentParser = ArgumentParser(description="Process data files and store them in a SQLite database.")
     argument_parser.add_argument("-A", "--get_alarm_data", nargs="?", const="", type=str, help="Get alarm data")
     argument_parser.add_argument("-T", "--get_token_data", nargs="?", const="", type=str, help="Get token data")
+    argument_parser.add_argument("-U", "--get_user_data", nargs="?", const="", type=str, help="Get user data")
     argument_parser.add_argument("-l", "--list", action="store_true", help="List available queries")
     argument_parser.add_argument("-q", "--query", help="Query data")
     argument_parser.add_argument("-v", "--verbose", action="store_true", help="Verbose")

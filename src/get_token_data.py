@@ -6,13 +6,13 @@ from src.get_paths import get_paths
 
 def get_token_data(path: str | list[str], verbose: bool = False) -> DataFrame:
     paths: list[str] = get_paths(path)
-    frames: list[DataFrame] = []
+    data_frames: list[DataFrame] = []
 
     # For each archive file...
     for path in paths:
         if verbose:
             print(f'Reading "{Path(path).name}"...')
 
-        frames.append(read_csv(path, keep_default_na=False, encoding="utf-16"))
+        data_frames.append(read_csv(path, keep_default_na=False, encoding="utf-16"))
 
-    return concat(frames, ignore_index=True)
+    return concat(data_frames, ignore_index=True).drop_duplicates()

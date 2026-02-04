@@ -17,17 +17,17 @@ SELECT a.datetime
             )
         ELSE NULL
     END AS pr
-    , u.name
+    , u.first_name
+    , u.last_name
     , a.event
-FROM alarm AS a
+FROM alarms AS a
     LEFT JOIN users AS u ON u.id = pr
 WHERE 0 = 0
-
     -- Exclude administration
     AND a.event NOT LIKE '%SIGNAL TRAITER%'
 
     -- Exclude closings
-    AND a.event NOT LIKE 'FERMETURE%'
+    --AND a.event NOT LIKE 'FERMETURE%'
     
     -- Exclude maintenance
     AND pr NOT IN ('001', '015')
@@ -44,8 +44,8 @@ WHERE 0 = 0
     -- Exclude working days and hours
     AND (
         STRFTIME('%w', a.datetime) NOT BETWEEN '1' AND '5' -- 1: Monday - 5: Friday
-        OR TIME(a.datetime) < '04:00:00'  -- First arrival time
-        OR TIME(a.datetime) >= '16:15:00'  -- Shipping closing time
+        OR TIME(a.datetime) < '04:00:00'  -- Opening time
+        OR TIME(a.datetime) >= '17:30:00'  -- Closing time
     )
 
 ORDER BY a.datetime ASC
