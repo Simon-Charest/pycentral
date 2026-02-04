@@ -63,7 +63,7 @@ def main() -> None:
 
 
 def parse_arguments() -> Namespace:
-    argument_parser: ArgumentParser = ArgumentParser(description="Process data files and store them in a SQLite database.")
+    argument_parser: ArgumentParser = ArgumentParser(description="PyCentral: Python Kantech Alarm and Token Log Analyser")
     argument_parser.add_argument("-A", "--get_alarm_data", nargs="?", const="", type=str, help="Get alarm data")
     argument_parser.add_argument("-T", "--get_token_data", nargs="?", const="", type=str, help="Get token data")
     argument_parser.add_argument("-U", "--get_user_data", nargs="?", const="", type=str, help="Get user data")

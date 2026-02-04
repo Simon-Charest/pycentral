@@ -1,4 +1,4 @@
-# PyCentral
+# PyCentral: Python Kantech Alarm and Token Log Analyser
 
 ## Setup
 ```powershell
