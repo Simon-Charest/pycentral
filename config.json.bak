@@ -1,14 +1,14 @@
 {
     "database": "data/events.db",
     "alarm": {
-        "data": "data/*.zip",
-        "table": "alarm",
-        "users": [
-            {"id": "000", "code": "1234", "enabled": "2025-01-31", "name": "Test", "disabled": "2026-01-28", "master": true},
-        ]
+        "data": "data/alarm/*.zip"
     },
     "token" : {
-        "data": "data/*.csv",
-        "table": "token"
+        "data": "data/token/*.csv"
+    },
+    "user": {
+        "data": [
+            {"id": "000", "code": "1234", "enabled": "2025-01-31", "first_name": "test_first_name", "last_name": "test_last_name", "master": true, "disabled": "2026-01-28", "token": "test_token"},
+        ]
     }
 }
