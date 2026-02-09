@@ -8,7 +8,6 @@ SELECT t.[Date and Time]
 FROM tokens AS t
     LEFT JOIN users AS u ON u.token = t.[Description #2]
 WHERE 0 = 0
-
     -- Exclude administration
     AND t.[Event message] NOT IN (
         'Automatic report requested'

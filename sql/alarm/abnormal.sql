@@ -47,6 +47,5 @@ WHERE 0 = 0
         OR TIME(a.datetime) < '04:00:00'  -- Opening time
         OR TIME(a.datetime) >= '17:30:00'  -- Closing time
     )
-
 ORDER BY a.datetime ASC
 ;
