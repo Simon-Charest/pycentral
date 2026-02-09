@@ -1,0 +1,35 @@
+{
+    "database": "data/events.db",
+    "alarm": {
+        "data": "data/alarm/*.zip"
+    },
+    "token" : {
+        "data": "data/token/*.csv"
+    },
+    "users": [
+        {
+            "id": "",
+            "first_name": "",
+            "alias": "",
+            "middle_name": "",
+            "maiden_name": "",
+            "last_name": "",
+            "emails": [
+                {"personal": ""}
+            ],
+            "token": "",
+            "alarm": {
+                "id": "",
+                "code": "",
+                "previous_code": "",
+                "master": false,
+                "enabled": "",
+                "disabled": ""
+            },
+            "phones": [
+                {"corporate": ""},
+                {"personal": ""}
+            ]
+        }
+    ]
+}

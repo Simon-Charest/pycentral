@@ -21,7 +21,7 @@ SELECT a.datetime
     , u.last_name
     , a.event
 FROM alarms AS a
-    LEFT JOIN users AS u ON u.id = pr
+    LEFT JOIN users AS u ON u.[alarm.id] = pr
 WHERE 0 = 0
     -- Exclude administration
     AND a.event NOT LIKE '%SIGNAL TRAITER%'

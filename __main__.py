@@ -1,11 +1,12 @@
 from argparse import ArgumentParser, Namespace
 from glob import glob
 from io import TextIOWrapper
-from pandas import DataFrame, set_option
+from pandas import DataFrame, json_normalize, set_option
 from pathlib import Path
 from sqlite3 import Connection
 from typing import Any
 
+from src.explode import explode
 from src.get_alarm_data import get_alarm_data
 from src.get_token_data import get_token_data
 from src.load_configuration import load_configuration
@@ -44,7 +45,15 @@ def main() -> None:
         write(data, connection, "tokens", "replace", False, arguments.verbose)
 
     if arguments.get_user_data is not None:
-        write(DataFrame(configuration["user"]["data"]), connection, "users", "replace", False, arguments.verbose)
+        users: DataFrame = json_normalize(configuration["users"])
+        users = users.drop(columns=["emails", "phones"])
+
+        # Normalize emails
+        emails: DataFrame = explode(configuration["users"], "emails")
+        phones: DataFrame = explode(configuration["users"], "phones")
+        write(users, connection, "users", "replace", False, arguments.verbose)
+        write(emails, connection, "emails", "replace", False, arguments.verbose)
+        write(phones, connection, "phones", "replace", False, arguments.verbose)
 
     if arguments.list:
         paths: list[str] = glob("sql/**/*.sql", recursive=True)
