@@ -11,8 +11,9 @@ FROM tokens AS t
         , t.[Description #2]
     )
 WHERE 0 = 0
-    -- Today
-    AND DATE(t.[Date and Time]) = DATE('NOW')
+    -- Last weekend
+    AND DATE(t.[Date and Time]) >= DATE('NOW', 'WEEKDAY 6', '-7 DAY')
+    AND DATE(t.[Date and Time]) <= DATE('NOW', 'WEEKDAY 0', '-7 DAY')
 
     -- Exclude administration
     AND t.[Event message] NOT IN (

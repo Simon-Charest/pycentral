@@ -6,7 +6,10 @@ SELECT t.[Date and Time]
     , u.[first_name]
     , u.[last_name]
 FROM tokens AS t
-    LEFT JOIN users AS u ON u.token = t.[Description #2]
+    LEFT JOIN users AS u ON u.token IN (
+        t.[Description #1]
+        , t.[Description #2]
+    )
 WHERE 0 = 0
     -- Exclude administration
     AND t.[Event message] NOT IN (

@@ -11,8 +11,8 @@ FROM tokens AS t
         , t.[Description #2]
     )
 WHERE 0 = 0
-    -- Today
-    AND DATE(t.[Date and Time]) = DATE('NOW')
+    -- Yesterday
+    AND DATE(t.[Date and Time]) = DATE('NOW', '-1 DAY')
 
     -- Exclude administration
     AND t.[Event message] NOT IN (
