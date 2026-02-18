@@ -1,1 +1,5 @@
+ffmpeg-python
+onvif-zeep
+opencv-python
 pandas
+pillow

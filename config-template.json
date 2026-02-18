@@ -3,6 +3,18 @@
     "alarm": {
         "data": "data/alarm/*.zip"
     },
+    "camera": {
+        "protocol": "rtsp",
+        "username": "",
+        "password": "",
+        "ip": "",
+        "port": 554,
+        "channel": 1,
+        "stream": 0,
+        "model": "",
+        "serial": "",
+        "version": ""
+    },
     "token" : {
         "data": "data/token/*.csv"
     },
