@@ -27,4 +27,4 @@ def get_alarm_data(path: str | list[str], verbose: bool = False) -> DataFrame:
 
         zip_file.close()
 
-    return DataFrame(events)
+    return DataFrame(events).fillna("")

@@ -1,25 +1,28 @@
 from argparse import ArgumentParser, Namespace
+from sys import stderr
 from cv2 import VideoCapture, imshow, waitKey, destroyAllWindows
 from cv2.typing import MatLike
 import ffmpeg
 from glob import glob
 from io import TextIOWrapper
+from os import O_WRONLY, devnull, dup, dup2, open as os_open
 from pandas import DataFrame, json_normalize, set_option
 from pathlib import Path
 from sqlite3 import Connection
-from typing import Any
+from typing import Any, Optional
 from urllib.parse import quote
 
 from src.explode import explode
 from src.get_alarm_data import get_alarm_data
 from src.get_token_data import get_token_data
 from src.load_configuration import load_configuration
+from src.mute import mute
 from src.sqlite import disconnect, get_connection, query, write
 
 
 def main() -> None:
     arguments: Namespace = parse_arguments()
-    configuration: dict[str, Any] = load_configuration(Path(__file__).parent.joinpath("config.json"), arguments.verbose)
+    configuration: dict[str, Any] = load_configuration(Path(__file__).parent.joinpath("config.json"), "utf-8", arguments.verbose)
     connection: Connection = get_connection(configuration["database"], arguments.verbose)
 
     set_option("display.max_rows", None)
@@ -37,8 +40,13 @@ def main() -> None:
         write(data, connection, "alarms", "replace", False, arguments.verbose)
 
     if arguments.get_camera_data:
-        filename: str = f"{configuration["camera"]["protocol"]}://{quote(configuration["camera"]["username"])}:{quote(configuration["camera"]["password"])}@{configuration["camera"]["ip"]}:{configuration["camera"]["port"]}/unicast/c{configuration["camera"]["channel"]}/s{configuration["camera"]["stream"]}/live"
+        camera_id: str = "Loading Dock NE"
+        channel: int = next(channel["no"] for channel in configuration["camera"]["channels"] if channel["camera_id"] == camera_id)
+        filename: str = f"{configuration["camera"]["protocol"]}://{quote(configuration["camera"]["username"])}:{quote(configuration["camera"]["password"])}@{configuration["camera"]["ip"]}:{configuration["camera"]["port"]}/unicast/c{channel}/s0/live"
+        
+        fd: int = mute()
         video_capture: VideoCapture = VideoCapture(filename)
+        mute(fd)
 
         if not video_capture.isOpened():
             raise Exception("Failed to open stream.")
@@ -51,7 +59,8 @@ def main() -> None:
         if not return_value:
             raise Exception("Failed to read frame.")
         
-        print(frame)
+        print(return_value)
+        print(frame[0][0])
 
     if arguments.get_token_data is not None:
         if len(arguments.get_token_data):
@@ -64,10 +73,8 @@ def main() -> None:
         write(data, connection, "tokens", "replace", False, arguments.verbose)
 
     if arguments.get_user_data is not None:
-        users: DataFrame = json_normalize(configuration["users"])
+        users: DataFrame = json_normalize(configuration["users"]).fillna("")
         users = users.drop(columns=["emails", "phones"])
-
-        # Normalize emails
         emails: DataFrame = explode(configuration["users"], "emails")
         phones: DataFrame = explode(configuration["users"], "phones")
         write(users, connection, "users", "replace", False, arguments.verbose)
@@ -90,6 +97,9 @@ def main() -> None:
 
     disconnect(connection, arguments.verbose)
 
+
+
+    
 
 def parse_arguments() -> Namespace:
     argument_parser: ArgumentParser = ArgumentParser(description="PyCentral: Data Acquisition & Analytics")

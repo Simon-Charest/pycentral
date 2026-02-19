@@ -15,4 +15,4 @@ def get_token_data(path: str | list[str], verbose: bool = False) -> DataFrame:
 
         data_frames.append(read_csv(path, keep_default_na=False, encoding="utf-16"))
 
-    return concat(data_frames, ignore_index=True).drop_duplicates()
+    return concat(data_frames, ignore_index=True).drop_duplicates().fillna("")

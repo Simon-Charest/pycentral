@@ -9,8 +9,18 @@
         "password": "",
         "ip": "",
         "port": 554,
-        "channel": 1,
-        "stream": 0,
+        "channels": [
+            {
+                "no": 1,
+                "camera_id": "",
+                "address": "",
+                "port": 80,
+                "remote_camera_id": 1,
+                "protocol": "Private",
+                "vendor": "",
+                "model": ""
+            }
+        ],
         "model": "",
         "serial": "",
         "version": ""
